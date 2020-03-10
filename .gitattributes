@@ -1,0 +1,15 @@
+# default behavior
+* text=auto
+
+# normalize to native line endings
+*.c text
+*.cpp text
+*.h text
+*.hpp text
+*.java text
+
+# always lf line endings
+*.sh eol=lf
+
+# always CRLF line endings
+*.bat text eol=crlf
