@@ -1,7 +1,7 @@
 //includes
-#include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "JNIHelper.h"
 
 #ifdef _WIN32
@@ -64,25 +64,29 @@ char getPressedCharacter()
 
 //helper methods for number conversion (windows only)
 #ifdef _WIN32
-std::string decToHex(int number)
+char* decToHex(int number)
 {
     char hexString[20];
-    return std::string(itoa(number, hexString, 16));
+    return itoa(number, hexString, 16);
 }
 
-int hexToDec(const std::string& str1)
+int hexToDec(char* str1)
 {
-    return strtol(str1.c_str(), NULL, 16);
+    return strtol(str1, NULL, 16);
 }
 
 int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
 {
-    std::string hexCurrent = decToHex(currentConsoleAttr);
-    std::string hexNew     = decToHex(newConsoleAttr);
+    char hexCurrent[3];
+    char hexNew[3];
 
-    if(hexCurrent.length() == 1)
+    strncpy(hexCurrent, decToHex(currentConsoleAttr), 3);
+    strncpy(hexNew,     decToHex(newConsoleAttr),     3);
+
+    if(strlen(hexCurrent) == 1)
     {
-        hexCurrent = hexNew;
+        hexCurrent[0] = hexNew[0];
+        hexCurrent[1] = hexNew[1];
     }
 
     else
