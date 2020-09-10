@@ -19,7 +19,7 @@ cd ../src
 rm -f *.class *.h
 javac JNIHelper.java
 javac JNIHelper.java -h .
-clang++ -fPIC -shared -o ../bin/libCLib.so JNIHelper.cpp -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -lncurses
+clang++ -fPIC -shared -o ../bin/libCLib.so JNIHelper.cpp -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -lm -lncurses -lportaudio
 
 echo Cleaning up ...
 rm -f *.class *.h

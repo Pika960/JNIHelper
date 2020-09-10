@@ -90,6 +90,13 @@ public class JNIHelper
     }
 
     /**
+     * generates simple tones on the speaker
+     * @param frequency frequency of the sound, in hertz
+     * @param duration duration of the sound, in milliseconds
+     */
+    public static native void beep(int frequency, int duration);
+
+    /**
      * wipes the content on the current used bash- or cmd-window
      */
     public static native void consoleClear();
