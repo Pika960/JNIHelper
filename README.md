@@ -29,6 +29,7 @@ local machine for development and testing purposes.
 * JDK (Java SDK)
 * gcc, g++ and clang
 * ncurses development package (per example libncurses-dev or ncurses-devel)
+* PortAudio development package (per example portaudio-devel)
 
 ### Setting up your system
 * check if the JAVA_HOME environment variable points to the root dir of the 
