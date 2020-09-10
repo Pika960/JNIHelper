@@ -43,7 +43,7 @@ javac -d bin %filenames%
 
 echo Running example-app ...
 cd bin
-java TestApp
+java TestApp noMenu
 
 echo.
 pause

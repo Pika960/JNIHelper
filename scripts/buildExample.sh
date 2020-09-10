@@ -24,4 +24,4 @@ javac -d ./bin $(find . -name '*.java')
 
 echo Running example-app ...
 cd ./bin
-java TestApp
+java TestApp noMenu
