@@ -1,7 +1,6 @@
 /**
- * The class JNIHelper is a bride class
- * which provides native native methods
- * for interaction with the Bash or the
+ * The class JNIHelper is a bride class which provides
+ * native methods for interaction with the Bash or the
  * Windows Command Prompt (CMD).
  *
  * @author  Gabriel Daenner

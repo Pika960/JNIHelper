@@ -8,10 +8,6 @@
     #include <conio.h>
     #include <windows.h>
 #else
-    /*
-        install libncurses5-dev
-        link against ncurses
-    */
     #include <curses.h>
     #include <term.h>
     #include <termios.h>

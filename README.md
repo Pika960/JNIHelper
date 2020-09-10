@@ -9,7 +9,7 @@ see [Wikipedia](https://en.wikipedia.org/wiki/Java_Native_Interface)
 
 > The Java Native Interface (JNI) is a foreign function interface programming 
 framework that enables Java code running in a Java virtual machine (JVM) to 
-call and be called by[1] native applications (programs specific to a hardware 
+call and be called by native applications (programs specific to a hardware 
 and operating system platform) and libraries written in other languages such 
 as C, C++ and assembly.
 
@@ -28,6 +28,7 @@ local machine for development and testing purposes.
 * Git
 * JDK (Java SDK)
 * gcc, g++ and clang
+* ncurses development package (per example libncurses-dev or ncurses-devel)
 
 ### Setting up your system
 * check if the JAVA_HOME environment variable points to the root dir of the 
