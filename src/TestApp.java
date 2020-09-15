@@ -44,10 +44,10 @@ public class TestApp
 
             //display menu entries
             System.out.print("1: Test \"Colored Text\"\n");
-            System.out.print("2: Test \"Pause/Wait for user input\n");
-            System.out.print("3: Test \"Clear console window\n");
-            System.out.print("4: Test \"Beep (minimalistic)\n");
-            System.out.print("5: Test \"Beep (complex)\n");
+            System.out.print("2: Test \"Pause/Wait for user input\"\n");
+            System.out.print("3: Test \"Clear console window\"\n");
+            System.out.print("4: Test \"Beep (minimalistic)\"\n");
+            System.out.print("5: Test \"Beep (complex)\"\n");
             System.out.print("6: Exit TestApp\n\n");
 
             while (!inputIsValid)
