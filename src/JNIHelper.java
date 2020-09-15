@@ -90,6 +90,14 @@ public class JNIHelper
     }
 
     /**
+     * get information about the system memory usage
+     * @param type defines which information will be returned, can be "available" or "total"
+     * @param unitMode controls the format for units, can be "kb", "mb" or "gb"
+     * @param round if set to true output will be rounded to two decimal places
+     */
+    public static native double getSystemMemoryInfo(String type, String unitMode, boolean round);
+
+    /**
      * generates simple tones on the speaker
      * @param frequency frequency of the sound, in hertz
      * @param duration duration of the sound, in milliseconds

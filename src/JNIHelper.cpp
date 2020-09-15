@@ -195,6 +195,72 @@ float beep_waveform_sine(beep_head *head)
 #endif
 
 //core methods
+JNIEXPORT jdouble JNICALL Java_JNIHelper_getSystemMemoryInfo(JNIEnv *env, jclass javaClass, jstring type, jstring unitMode, jboolean round)
+{
+    const char *t  = env->GetStringUTFChars(type, NULL);
+    const char *um = env->GetStringUTFChars(unitMode, NULL);
+
+    double  divider          = 0;
+    jdouble systemMemoryInfo = 0;
+
+    if (strcmp("mb", um) == 0)
+    {
+        divider = 1024 * 1024;
+    }
+
+    else if (strcmp("gb", um) == 0)
+    {
+        divider = 1024 * 1024 * 1024;
+    }
+
+    else
+    {
+        divider = 1024;
+    }
+
+    #ifdef _WIN32
+    MEMORYSTATUSEX statex;
+    statex.dwLength = sizeof(statex);
+
+    GlobalMemoryStatusEx(&statex);
+
+    if (strcmp("available", t) == 0)
+    {
+        systemMemoryInfo = (statex.ullAvailPhys / divider);
+    }
+
+    else
+    {
+        systemMemoryInfo = (statex.ullTotalPhys / divider);
+    }
+    #else
+    unsigned long long page_size  = 0;
+    unsigned long long pages_phys = 0;
+
+    if (strcmp("available", t) == 0)
+    {
+        page_size  = sysconf(_SC_PAGESIZE);
+        pages_phys = sysconf(_SC_AVPHYS_PAGES);
+    }
+
+    else
+    {
+        page_size  = sysconf(_SC_PAGE_SIZE);
+        pages_phys = sysconf(_SC_PHYS_PAGES);
+    }
+
+    systemMemoryInfo = (page_size * pages_phys) / divider;
+    #endif
+
+    if (round == JNI_TRUE)
+    {
+        systemMemoryInfo = (int)(systemMemoryInfo * 100 + 0.5);
+        return (jdouble)(systemMemoryInfo / 100);
+    }
+
+    return systemMemoryInfo;
+}
+
 JNIEXPORT void JNICALL Java_JNIHelper_beep(JNIEnv *env, jclass javaClass, jint frequency, jint duration)
 {
     #ifdef _WIN32
