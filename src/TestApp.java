@@ -48,7 +48,8 @@ public class TestApp
             System.out.print("3: Test \"Clear console window\"\n");
             System.out.print("4: Test \"Beep (minimalistic)\"\n");
             System.out.print("5: Test \"Beep (complex)\"\n");
-            System.out.print("6: Exit TestApp\n\n");
+            System.out.print("6: Test \"Get system memory information\"\n");
+            System.out.print("7: Exit TestApp\n\n");
 
             while (!inputIsValid)
             {
@@ -57,7 +58,7 @@ public class TestApp
                     System.out.print("Please select an option: ");
                     userInput = scanner.nextInt();
 
-                    if (userInput != 6)
+                    if (userInput != 7)
                     {
                         JNIHelper.consoleClear();
                         testCases(userInput);
@@ -73,7 +74,7 @@ public class TestApp
             }
 
             inputIsValid = false;
-        } while(userInput != 6);
+        } while(userInput != 7);
     }
 
     private static void quickTests()
@@ -165,6 +166,20 @@ public class TestApp
                 JNIHelper.beep(convertNoteToFrequency( 6), 440);
                 JNIHelper.beep(convertNoteToFrequency( 3), 440);
                 JNIHelper.beep(convertNoteToFrequency( 3), 440);
+
+                JNIHelper.consolePause();
+                JNIHelper.consoleClear();
+            } break;
+
+            case (6):
+            {
+                System.out.print("Test 6 - Get system memory information\n\n");
+
+                int availableSystemMemory = (int)JNIHelper.getSystemMemoryInfo("available", "kb", false);
+                int totalSystemMemory     = (int)JNIHelper.getSystemMemoryInfo("total",     "kb", false);
+
+                System.out.printf("There are %d free  KB of physical memory.\n",   availableSystemMemory);
+                System.out.printf("There are %d total KB of physical memory.\n\n", totalSystemMemory);
 
                 JNIHelper.consolePause();
                 JNIHelper.consoleClear();
