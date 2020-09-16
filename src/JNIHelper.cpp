@@ -44,6 +44,12 @@
 #endif
 
 //helper method for interacting with the console
+void flushBuffers()
+{
+    fflush(stdout);
+    fflush(stdin);
+}
+
 char getPressedCharacter()
 {
     #ifdef _WIN32
@@ -282,6 +288,8 @@ JNIEXPORT void JNICALL Java_JNIHelper_beep(JNIEnv *env, jclass javaClass, jint f
 
 JNIEXPORT void JNICALL Java_JNIHelper_consoleClear(JNIEnv *env, jclass javaClass)
 {
+    flushBuffers();
+
     #ifdef _WIN32
     HANDLE                     hStdOut;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -329,10 +337,14 @@ JNIEXPORT void JNICALL Java_JNIHelper_consoleClear(JNIEnv *env, jclass javaClass
 
     putp(tigetstr("clear"));
     #endif
+
+    flushBuffers();
 }
 
 JNIEXPORT void JNICALL Java_JNIHelper_consolePause(JNIEnv *env, jclass javaClass)
 {
+    flushBuffers();
+
     char chKey;
     int  numKey;
 
@@ -352,10 +364,14 @@ JNIEXPORT void JNICALL Java_JNIHelper_consolePause(JNIEnv *env, jclass javaClass
     #ifdef __linux__
     printf("%s", "\n");
     #endif
+
+    flushBuffers();
 }
 
 JNIEXPORT void JNICALL Java_JNIHelper_printColoredText(JNIEnv *env, jclass javaClass, jstring str, jint colorCode)
 {
+    flushBuffers();
+
     const char *arg = env->GetStringUTFChars(str, NULL);
     
     #ifdef _WIN32
@@ -386,6 +402,8 @@ JNIEXPORT void JNICALL Java_JNIHelper_printColoredText(JNIEnv *env, jclass javaC
     #else
     printf("\e[1;%dm%s\e[0m", colorCode, arg);
     #endif
+
+    flushBuffers();
 }
 
 JNIEXPORT void JNICALL Java_JNIHelper_sendStringToNative(JNIEnv *env, jclass javaClass, jstring str)
