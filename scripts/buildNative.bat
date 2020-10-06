@@ -5,6 +5,9 @@ echo Buildsystem for JNIHelper - Windows
 echo (c) 2020 Gabriel Daenner
 echo.
 
+if /i [%1]==[--use-gcc]  set PREFERRED_COMPILER=GCC
+if /i [%1]==[--use-msvc] set PREFERRED_COMPILER=MSVC
+
 if not exist ..\bin (
     echo Error: No build directory found.
     echo Closing application ...
@@ -18,7 +21,7 @@ if exist ..\src (
     
     if exist *.class (
         echo Cleaning up build ...
-        del *.class *.h
+        del *.class *.h *.obj
     ) else (echo Nothing to clean)
 ) else (
     echo Error: No src directory found.
@@ -50,26 +53,71 @@ if ERRORLEVEL 1 (
     exit /b
 )
 
+if /i "%PREFERRED_COMPILER%"=="GCC"  (goto LOOKUP_GCC)
+if /i "%PREFERRED_COMPILER%"=="MSVC" (goto LOOKUP_MSVC)
+
+:LOOKUP_GCC
 echo Searching for gcc in path ...
 where /q gcc.exe
 if ERRORLEVEL 1 (
-    echo Error: GCC seems to be missing. Ensure it is installed and placed in your PATH.
+    if /i "%PREFERRED_COMPILER%"=="GCC" (
+        echo Error: GCC seems to be missing. Ensure it is installed and placed in your PATH.
+        echo Closing application ...
+        echo.
+        pause
+        exit /b
+    ) else (
+        echo INFO: GCC seems to be missing.
+    )
+) else (
+    set  PREFERRED_COMPILER=GCC
+    goto BUILD_DLL
+)
+
+:LOOKUP_MSVC
+if exist "!ProgramFiles(x86)!\Microsoft Visual Studio\Installer\" (
+    set "path=!path!;!ProgramFiles(x86)!\Microsoft Visual Studio\Installer\"
+    echo Searching for Visual Studio native workload ...
+
+    for /f "usebackq tokens=*" %%i in (`vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do (
+        set InstallDir=%%i
+    )
+
+    if exist "!InstallDir!\Common7\Tools\vsdevcmd.bat" (
+        call "!InstallDir!\Common7\Tools\vsdevcmd.bat" -no_logo -arch=x64
+        set PREFERRED_COMPILER=MSVC
+    ) else (
+        echo Error: The workload "Desktop development with C++" is not installed on this system.
+        echo Closing application ...
+        echo.
+        pause
+        exit /b
+    )
+) else (
+    echo Error: Visual Studio Installer is not installed on this system.
     echo Closing application ...
     echo.
     pause
     exit /b
 )
 
+:BUILD_DLL
 echo Compiling JNIHelper.java
 javac JNIHelper.java
 echo Generating resources
 javac JNIHelper.java -h .
 
 echo Creating JNI-DLL
-g++ -Wall -D_JNI_IMPLEMENTATION_ -Wl,--kill-at  -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32  -shared -o ..\bin\CLib.dll JNIHelper.cpp -m64
+if /i "%PREFERRED_COMPILER%"=="GCC" (
+    g++ -Wall -D_JNI_IMPLEMENTATION_ -Wl,--kill-at  -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32  -shared -o ..\bin\CLib.dll JNIHelper.cpp -m64
+)
+
+if /i "%PREFERRED_COMPILER%"=="MSVC" (
+    cl -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -LD -MT JNIHelper.cpp -Fe..\bin\CLib.dll
+)
 
 echo Cleaning up ...
-del *.h *.class
+del *.class *.h *.obj
 echo.
 
 pause
