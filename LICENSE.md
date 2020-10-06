@@ -1,7 +1,7 @@
-### Revised BSD License
+### BSD 3-Clause License
 
-_Copyright © 2020, Gabriel Daenner_ \
-_All rights reserved._
+Copyright © 2020, Gabriel Daenner
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
