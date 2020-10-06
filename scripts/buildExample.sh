@@ -1,5 +1,5 @@
 #!/bin/sh
-# Buildsystem for JNIHelper - Windows
+# Buildsystem for JNIHelper - Linux
 # (c) 2020 Gabriel Daenner
 
 if [ -z "$JAVA_HOME" ]
@@ -11,6 +11,18 @@ then
     echo The first command is only for the current shell session.
     echo The second command is persistent but requires a restart of the shell.
     echo The path above is only an example and may differ.
+    exit
+fi
+
+if ! [ -x "$(command -v javac)" ]
+then
+    echo Error: javac seems to be missing. Ensure it is installed. >&2
+    exit
+fi
+
+if ! [ -x "$(command -v java)" ]
+then
+    echo Error: java seems to be missing. Ensure it is installed. >&2
     exit
 fi
 
