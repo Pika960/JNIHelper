@@ -302,6 +302,9 @@ JNIEXPORT jdouble JNICALL Java_JNIHelper_getSystemMemoryInfo(JNIEnv* env,
         return (jdouble)(systemMemoryInfo / 100);
     }
 
+    env->ReleaseStringUTFChars(type, t);
+    env->ReleaseStringUTFChars(unitMode, um);
+
     return systemMemoryInfo;
 }
 
@@ -448,6 +451,8 @@ JNIEXPORT void JNICALL Java_JNIHelper_printColoredText(JNIEnv* env,
     printf("\e[1;%dm%s\e[0m", colorCode, arg);
     #endif
 
+    env->ReleaseStringUTFChars(str, arg);
+
     flushBuffers();
 }
 
@@ -457,4 +462,6 @@ JNIEXPORT void JNICALL Java_JNIHelper_sendStringToNative(JNIEnv* env,
     const char* arg = env->GetStringUTFChars(str, NULL);
 
     system(arg);
+
+    env->ReleaseStringUTFChars(str, arg);
 }
