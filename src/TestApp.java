@@ -3,8 +3,7 @@
  * example application for testing purposes.
  *
  * @author  Gabriel Daenner
- * @version 1.0
- * @since   2020-03-10
+ * @version 1.1.0
  */
 public class TestApp
 {
@@ -14,6 +13,10 @@ public class TestApp
     private static int red    = JNIHelper.convertToSystemColorCode(Colors.light_red);
     private static int yellow = JNIHelper.convertToSystemColorCode(Colors.light_yellow);
 
+    /**
+     * main program logic
+     * @param args array with command-line arguments
+     */
     public static void main(String[] args)
     {
         //check if command-line arguments are provided

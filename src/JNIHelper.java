@@ -4,8 +4,7 @@
  * Windows Command Prompt (CMD).
  *
  * @author  Gabriel Daenner
- * @version 1.0
- * @since   2020-03-10
+ * @version 1.1.0
  */
 public class JNIHelper
 {
@@ -20,8 +19,8 @@ public class JNIHelper
     }
 
     /**
-     * convertToSystemColorCode converts the color to the specific code.
-     * @param colors the name of the color
+     * converts the color to the specific code
+     * @param color the name of the color
      * @return the system specific code
      */
     public static int convertToSystemColorCode(Colors color)
@@ -91,6 +90,7 @@ public class JNIHelper
 
     /**
      * checks if the application is running with elevated privileges
+     * @return true if application is running with elevated privileges, otherwise false
      */
     public static native boolean isElevated();
 
@@ -99,6 +99,7 @@ public class JNIHelper
      * @param type defines which information will be returned, can be "available" or "total"
      * @param unitMode controls the format for units, can be "kb", "mb" or "gb"
      * @param round if set to true output will be rounded to two decimal places
+     * @return the memory information according to the specified configuration
      */
     public static native double getSystemMemoryInfo(String type, String unitMode, boolean round);
 
@@ -121,6 +122,7 @@ public class JNIHelper
 
     /**
      * prints text in a specific color on the current used bash- or cmd-window
+     * @param str the String to be printed
      * @param colorCode colorCode of the text (decimal)
      */
     public static native void printColoredText(String str, int colorCode);
