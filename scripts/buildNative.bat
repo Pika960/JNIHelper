@@ -113,7 +113,7 @@ if /i "%PREFERRED_COMPILER%"=="GCC" (
 )
 
 if /i "%PREFERRED_COMPILER%"=="MSVC" (
-    cl -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -LD -MT JNIHelper.cpp -Fe..\bin\CLib.dll
+    cl -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -LD -MT -Fe..\bin\CLib.dll JNIHelper.cpp Advapi32.lib
 )
 
 echo Cleaning up ...
