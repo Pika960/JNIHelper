@@ -49,7 +49,8 @@ public class TestApp
             System.out.print("4: Test \"Beep (minimalistic)\"\n");
             System.out.print("5: Test \"Beep (complex)\"\n");
             System.out.print("6: Test \"Get system memory information\"\n");
-            System.out.print("7: Exit TestApp\n\n");
+            System.out.print("7: Test \"Display current elevation level\"\n");
+            System.out.print("8: Exit TestApp\n\n");
 
             while (!inputIsValid)
             {
@@ -58,7 +59,7 @@ public class TestApp
                     System.out.print("Please select an option: ");
                     userInput = scanner.nextInt();
 
-                    if (userInput != 7)
+                    if (userInput != 8)
                     {
                         JNIHelper.consoleClear();
                         testCases(userInput);
@@ -74,7 +75,7 @@ public class TestApp
             }
 
             inputIsValid = false;
-        } while(userInput != 7);
+        } while(userInput != 8);
     }
 
     private static void quickTests()
@@ -184,6 +185,25 @@ public class TestApp
                 JNIHelper.consolePause();
                 JNIHelper.consoleClear();
             } break;
+
+            case (7):
+            {
+                System.out.print("Test 7 - Display current elevation level\n\n");
+                System.out.print("Current elevation level: ");
+
+                if (JNIHelper.isElevated())
+                {
+                    JNIHelper.printColoredText("Root\n\n", red);
+                }
+
+                else
+                {
+                    JNIHelper.printColoredText("User\n\n", green);
+                }
+
+                JNIHelper.consolePause();
+                JNIHelper.consoleClear();
+            }
         }
     }
 

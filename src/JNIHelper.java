@@ -90,6 +90,11 @@ public class JNIHelper
     }
 
     /**
+     * checks if the application is running with elevated privileges
+     */
+    public static native boolean isElevated();
+
+    /**
      * get information about the system memory usage
      * @param type defines which information will be returned, can be "available" or "total"
      * @param unitMode controls the format for units, can be "kb", "mb" or "gb"

@@ -202,6 +202,42 @@ float beep_waveform_sine(beep_head* head)
 #endif
 
 //core methods
+JNIEXPORT jboolean JNICALL Java_JNIHelper_isElevated(JNIEnv* env,
+    jclass javaClass)
+{
+    jboolean isElevated = JNI_FALSE;
+
+    #ifdef _WIN32
+    HANDLE hToken;
+
+    if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
+    {
+        DWORD           cbSize;
+        TOKEN_ELEVATION elevation;
+
+        cbSize = sizeof(TOKEN_ELEVATION);
+
+        if (GetTokenInformation(hToken, TokenElevation, &elevation,
+            sizeof(elevation), &cbSize))
+        {
+            isElevated = elevation.TokenIsElevated;
+        }
+
+        if(hToken)
+        {
+            CloseHandle(hToken);
+        }
+    }
+    #else
+    if (geteuid() == 0)
+    {
+        isElevated = JNI_TRUE;
+    }
+    #endif
+
+    return isElevated;
+}
+
 JNIEXPORT jdouble JNICALL Java_JNIHelper_getSystemMemoryInfo(JNIEnv* env,
     jclass javaClass, jstring type, jstring unitMode, jboolean round)
 {
