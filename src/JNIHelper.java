@@ -110,6 +110,12 @@ public class JNIHelper
     public static native String getComputerName();
 
     /**
+     * get the name of the user associated with the current thread
+     * @return the name of the user associated with the current thread
+     */
+    public static native String getUserName();
+
+    /**
      * generates simple tones on the speaker
      * @param frequency frequency of the sound, in hertz
      * @param duration duration of the sound, in milliseconds

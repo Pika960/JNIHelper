@@ -8,10 +8,12 @@
     #include <conio.h>
     #include <wchar.h>
     #include <windows.h>
+    #include <lmcons.h>
 #else
     #include <curses.h>
     #include <math.h>
     #include <portaudio.h>
+    #include <pwd.h>
     #include <sys/param.h>
     #include <term.h>
     #include <termios.h>
@@ -334,6 +336,42 @@ JNIEXPORT jstring JNICALL Java_JNIHelper_getComputerName(JNIEnv* env,
     #endif
 
     return env->NewStringUTF(computerName);
+}
+
+JNIEXPORT jstring JNICALL Java_JNIHelper_getUserName(JNIEnv* env,
+    jclass javaClass)
+{
+    #ifdef _WIN32
+    char    userName [UNLEN + 1];
+    wchar_t userNameW[UNLEN + 1];
+    DWORD   size = sizeof(userNameW) / sizeof(userNameW[0]);
+
+    if (GetUserNameW(userNameW, &size) == 0)
+    {
+        return env->NewStringUTF("Undefined");
+    }
+
+    wcstombs(userName, userNameW, (UNLEN + 1));
+    #else
+    char*  userName;
+    struct passwd *pw;
+    uid_t  uid;
+
+    uid = geteuid();
+    pw  = getpwuid(uid);
+
+    if (pw)
+    {
+        userName = pw->pw_name;
+    }
+
+    else
+    {
+        userName = (char*)"Undefined";
+    }
+    #endif
+
+    return env->NewStringUTF(userName);
 }
 
 JNIEXPORT void JNICALL Java_JNIHelper_beep(JNIEnv* env, jclass javaClass,
