@@ -24,7 +24,7 @@
     #define getch() _getch()
 #endif
 
-#ifdef __linux__
+#ifndef _WIN32
     #define SAMPLE_RATE         44100
     #define FRAMES_PER_BUFFER   512
 
@@ -133,8 +133,8 @@ int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
 }
 #endif
 
-//helper methods for sound generation (linux only)
-#ifdef __linux__
+//helper methods for sound generation (POSIX only)
+#ifndef _WIN32
 void portaudio_initialize()
 {
     if (!freopen("/dev/null", "w", stderr))
@@ -473,7 +473,7 @@ JNIEXPORT void JNICALL Java_JNIHelper_consolePause(JNIEnv* env,
         }
     }
 
-    #ifdef __linux__
+    #ifndef _WIN32
     printf("%s", "\n");
     #endif
 
