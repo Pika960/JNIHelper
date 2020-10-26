@@ -104,6 +104,12 @@ public class JNIHelper
     public static native double getSystemMemoryInfo(String type, String unitMode, boolean round);
 
     /**
+     * get the hostname of the local computer
+     * @return the hostname of the local computer
+     */
+    public static native String getComputerName();
+
+    /**
      * generates simple tones on the speaker
      * @param frequency frequency of the sound, in hertz
      * @param duration duration of the sound, in milliseconds

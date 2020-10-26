@@ -6,11 +6,13 @@
 
 #ifdef _WIN32
     #include <conio.h>
+    #include <wchar.h>
     #include <windows.h>
 #else
     #include <curses.h>
     #include <math.h>
     #include <portaudio.h>
+    #include <sys/param.h>
     #include <term.h>
     #include <termios.h>
     #include <unistd.h>
@@ -306,6 +308,32 @@ JNIEXPORT jdouble JNICALL Java_JNIHelper_getSystemMemoryInfo(JNIEnv* env,
     env->ReleaseStringUTFChars(unitMode, um);
 
     return systemMemoryInfo;
+}
+
+JNIEXPORT jstring JNICALL Java_JNIHelper_getComputerName(JNIEnv* env,
+    jclass javaClass)
+{
+    #ifdef _WIN32
+    char    computerName [MAX_COMPUTERNAME_LENGTH + 1];
+    wchar_t computerNameW[MAX_COMPUTERNAME_LENGTH + 1];
+    DWORD   size = sizeof(computerNameW) / sizeof(computerNameW[0]);
+
+    if (GetComputerNameW(computerNameW, &size) == 0)
+    {
+        return env->NewStringUTF("Undefined");
+    }
+
+    wcstombs(computerName, computerNameW, (MAX_COMPUTERNAME_LENGTH + 1));
+    #else
+    char computerName[MAXHOSTNAMELEN + 1];
+
+    if (gethostname(computerName, MAXHOSTNAMELEN) != 0)
+    {
+        return env->NewStringUTF("Undefined");
+    }
+    #endif
+
+    return env->NewStringUTF(computerName);
 }
 
 JNIEXPORT void JNICALL Java_JNIHelper_beep(JNIEnv* env, jclass javaClass,
