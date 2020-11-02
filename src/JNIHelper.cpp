@@ -350,6 +350,34 @@ JNIEXPORT jstring JNICALL Java_JNIHelper_getComputerName(JNIEnv* env,
     return env->NewStringUTF(computerName);
 }
 
+JNIEXPORT jstring JNICALL Java_JNIHelper_getOperatingSystemName(JNIEnv* env,
+    jclass javaClass)
+{
+    char operatingSystemName[256];
+
+    #if defined (_AIX)
+    strcpy(operatingSystemName, "AIX");
+    #elif defined (BSD)
+    strcpy(operatingSystemName, "BSD");
+    #elif defined (__hpux)
+    strcpy(operatingSystemName, "HP-UX");
+    #elif defined (__linux__)
+    strcpy(operatingSystemName, "Linux");
+    #elif defined (__APPLE__) && defined (__MACH__)
+    strcpy(operatingSystemName, "macOS");
+    #elif defined(__sun) && defined(__SVR4)
+    strcpy(operatingSystemName, "Solaris");
+    #elif defined(__unix__)
+    strcpy(operatingSystemName, "UNIX");
+    #elif defined (_WIN32) || defined (_WIN64)
+    strcpy(operatingSystemName, "Windows");
+    #else
+    strcpy(operatingSystemName, "Unsupported");
+    #endif
+
+    return env->NewStringUTF(operatingSystemName);
+}
+
 JNIEXPORT jstring JNICALL Java_JNIHelper_getUserName(JNIEnv* env,
     jclass javaClass)
 {

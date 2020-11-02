@@ -110,6 +110,12 @@ public class JNIHelper
     public static native String getComputerName();
 
     /**
+     * get the name of the currently running operating system
+     * @return the the name of the currently running operating system
+     */
+    public static native String getOperatingSystemName();
+
+    /**
      * get the name of the user associated with the current thread
      * @return the name of the user associated with the current thread
      */
