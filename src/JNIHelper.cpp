@@ -48,10 +48,22 @@
 #endif
 
 //helper method for interacting with the console
+void clearInputBuffer()
+{
+    #ifdef _WIN32
+    FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+    #else
+    int stdin_copy = dup(STDIN_FILENO);
+    tcdrain(stdin_copy);
+    tcflush(stdin_copy, TCIFLUSH);
+    close(stdin_copy);
+    #endif
+}
+
 void flushBuffers()
 {
     fflush(stdout);
-    fflush(stdin);
+    clearInputBuffer();
 }
 
 char getPressedCharacter()
