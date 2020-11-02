@@ -37,7 +37,7 @@ public class JNIHelper
             blue  = 34, magenta = 35, cyan  = 36, white  = 37
         */
 
-        String systemName = System.getProperty("os.name").toLowerCase();
+        String systemName = getOperatingSystemName().toLowerCase();
 
         if(systemName.contains("win"))
         {
@@ -60,8 +60,10 @@ public class JNIHelper
             else                                  return  0;
         }
 
-        else if(systemName.contains("nix") || systemName.contains("nux")
-            || systemName.contains("aix"))
+        else if(systemName.contains("aix") || systemName.contains("bsd")
+            || systemName.contains("hp")   || systemName.contains("mac")
+            || systemName.contains("nix")  || systemName.contains("nux")
+            || systemName.contains("sol"))
         {
                  if(color == Colors.black)        return 30;
             else if(color == Colors.blue)         return 34;
