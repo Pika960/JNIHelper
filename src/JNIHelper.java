@@ -55,6 +55,15 @@ public class JNIHelper
     public static native String getOperatingSystemName();
 
     /**
+     * retrieves the data for the specified registry value as a text string
+     * @param hkey the name of a handle to an open registry key
+     * @param subkey the path of a registry key relative to the key specified by the hkey parameter
+     * @param value the name of the registry value
+     * @return the data of the specified registry key (ErrorCode = "Undefinded")
+     */
+    public static native String getRegistryValueText(String hkey, String subkey, String value);
+
+    /**
      * get the name of the user associated with the current thread
      * @return the name of the user associated with the current thread
      */

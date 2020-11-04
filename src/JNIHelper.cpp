@@ -185,6 +185,18 @@ HKEY convertStringToHKEY(JNIEnv* env, jstring hkey)
     return rootKey;
 }
 
+void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, char& pvData)
+{
+    DWORD pcbData = 256;
+    LONG  resGet  = RegGetValue(hkey, lpSubKey, lpValue, RRF_RT_ANY, NULL,
+        (PVOID)&pvData, &pcbData);
+
+    if (resGet != ERROR_SUCCESS)
+    {
+        strcpy(&pvData, "Undefined");
+    }
+}
+
 void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD& pvData)
 {
     DWORD pcbData = sizeof(DWORD);
@@ -463,6 +475,35 @@ JNIEXPORT jstring JNICALL Java_JNIHelper_getOperatingSystemName(JNIEnv* env,
     #endif
 
     return env->NewStringUTF(operatingSystemName);
+}
+
+JNIEXPORT jstring JNICALL Java_JNIHelper_getRegistryValueText(JNIEnv* env,
+    jclass javaClass, jstring hkey, jstring subkey, jstring value)
+{
+    #ifdef _WIN32
+    HKEY rootKey = convertStringToHKEY(env, hkey);
+
+    if (rootKey == NULL)
+    {
+        return env->NewStringUTF("Undefined");
+    }
+
+    else
+    {
+        char   pvData[256] = {};
+        LPCSTR lpSubKey    = (LPCSTR)env->GetStringUTFChars(subkey, NULL);
+        LPCSTR lpValue     = (LPCSTR)env->GetStringUTFChars(value,  NULL);
+
+        getRegValue(rootKey, lpSubKey, lpValue, *pvData);
+
+        env->ReleaseStringUTFChars(subkey, lpSubKey);
+        env->ReleaseStringUTFChars(value,  lpValue);
+
+        return env->NewStringUTF(pvData);
+    }
+    #else
+    return env->NewStringUTF("Undefined");
+    #endif
 }
 
 JNIEXPORT jstring JNICALL Java_JNIHelper_getUserName(JNIEnv* env,
