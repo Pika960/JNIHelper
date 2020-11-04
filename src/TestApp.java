@@ -8,10 +8,10 @@
 public class TestApp
 {
     //get some colors
-    private static int blue   = JNIHelper.convertToSystemColorCode(Colors.light_blue);
-    private static int green  = JNIHelper.convertToSystemColorCode(Colors.light_green);
-    private static int red    = JNIHelper.convertToSystemColorCode(Colors.light_red);
-    private static int yellow = JNIHelper.convertToSystemColorCode(Colors.light_yellow);
+    private static int blue   = Colors.light_blue.getColorCode();
+    private static int green  = Colors.light_green.getColorCode();
+    private static int red    = Colors.light_red.getColorCode();
+    private static int yellow = Colors.light_yellow.getColorCode();
 
     /**
      * main program logic
@@ -83,9 +83,9 @@ public class TestApp
 
     private static void quickTests()
     {
-        JNIHelper.printColoredText("Blue\n",     blue);
-        JNIHelper.printColoredText("Green\n",    green);
-        JNIHelper.printColoredText("Red\n",      red);
+        JNIHelper.printColoredText("Blue\n",   blue);
+        JNIHelper.printColoredText("Green\n",  green);
+        JNIHelper.printColoredText("Red\n",    red);
         JNIHelper.printColoredText("Yellow\n", yellow);
         JNIHelper.beep(440, 1000);
     }
