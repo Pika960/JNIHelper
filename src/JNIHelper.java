@@ -35,6 +35,16 @@ public class JNIHelper
     public static native boolean setRegistryValueNumeric(String hkey, String subkey, String value, int data);
 
     /**
+     * sets the data of a specified value under a registry key (LPCSTR)
+     * @param hkey the name of a handle to an open registry key
+     * @param subkey the path of a registry key relative to the key specified by the hkey parameter
+     * @param value the name of the registry value
+     * @param data the data to be stored
+     * @return true if writing data succeeded, otherwise false
+     */
+    public static native boolean setRegistryValueText(String hkey, String subkey, String value, String data);
+
+    /**
      * get information about the system memory usage
      * @param type defines which information will be returned, can be "available" or "total"
      * @param unitMode controls the format for units, can be "kb", "mb" or "gb"

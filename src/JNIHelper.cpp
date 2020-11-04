@@ -6,6 +6,7 @@
 
 #ifdef _WIN32
     #include <conio.h>
+    #include <tchar.h>
     #include <wchar.h>
     #include <windows.h>
     #include <lmcons.h>
@@ -222,6 +223,43 @@ LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD dwData)
     return ERROR_SUCCESS;
 }
 
+LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, LPCSTR lpData)
+{
+    HKEY regKey;
+    LONG resOpen = RegOpenKeyEx(hkey, lpSubKey, 0, KEY_ALL_ACCESS , &regKey);
+
+    if (resOpen != ERROR_SUCCESS)
+    {
+        if (resOpen == ERROR_FILE_NOT_FOUND)
+        {
+            RegCreateKeyEx(hkey, lpSubKey, NULL, NULL,
+                REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &regKey, NULL);
+        }
+
+        else
+        {
+            return resOpen;
+        }
+    }
+
+    LONG resSet = RegSetValueEx(regKey, lpValue, 0, REG_SZ,
+        (LPBYTE)lpData, _tcslen(lpData) * sizeof(TCHAR));
+
+    if (resSet != ERROR_SUCCESS)
+    {
+        return resSet;
+    }
+
+    LONG resClose = RegCloseKey(regKey);
+
+    if (resClose != ERROR_SUCCESS)
+    {
+        return resClose;
+    }
+
+    return ERROR_SUCCESS;
+}
+
 void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, char& pvData)
 {
     DWORD pcbData = 256;
@@ -381,6 +419,42 @@ JNIEXPORT jboolean JNICALL Java_JNIHelper_setRegistryValueNumeric(JNIEnv* env,
 
         env->ReleaseStringUTFChars(subkey, lpSubKey);
         env->ReleaseStringUTFChars(value,  lpValue);
+
+        if (result != ERROR_SUCCESS)
+        {
+            return JNI_FALSE;
+        }
+
+        return JNI_TRUE;
+    }
+    #else
+    return JNI_FALSE;
+    #endif
+}
+
+JNIEXPORT jboolean JNICALL Java_JNIHelper_setRegistryValueText(JNIEnv* env,
+    jclass javaClass, jstring hkey, jstring subkey, jstring value,
+    jstring data)
+{
+    #ifdef _WIN32
+    HKEY rootKey = convertStringToHKEY(env, hkey);
+
+    if (rootKey == NULL)
+    {
+        return JNI_FALSE;
+    }
+
+    else
+    {
+        LPCSTR lpSubKey = (LPCSTR)env->GetStringUTFChars(subkey, NULL);
+        LPCSTR lpValue  = (LPCSTR)env->GetStringUTFChars(value,  NULL);
+        LPCSTR lpData   = (LPCSTR)env->GetStringUTFChars(data,   NULL);
+
+        LONG result = setRegValue(rootKey, lpSubKey, lpValue, lpData);
+
+        env->ReleaseStringUTFChars(subkey, lpSubKey);
+        env->ReleaseStringUTFChars(value,  lpValue);
+        env->ReleaseStringUTFChars(data,   lpData);
 
         if (result != ERROR_SUCCESS)
         {
