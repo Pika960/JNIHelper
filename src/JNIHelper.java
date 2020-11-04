@@ -34,6 +34,15 @@ public class JNIHelper
     public static native double getSystemMemoryInfo(String type, String unitMode, boolean round);
 
     /**
+     * retrieves the data for the specified registry value as a numeric value (DWORD)
+     * @param hkey the name of a handle to an open registry key
+     * @param subkey the path of a registry key relative to the key specified by the hkey parameter
+     * @param value the name of the registry value
+     * @return the data of the specified registry key (ErrorCode = -1)
+     */
+    public static native int getRegistryValueNumeric(String hkey, String subkey, String value);
+
+    /**
      * get the hostname of the local computer
      * @return the hostname of the local computer
      */

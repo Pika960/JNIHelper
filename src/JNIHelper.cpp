@@ -143,6 +143,59 @@ int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
 
     return hexToDec(hexCurrent);
 }
+
+HKEY convertStringToHKEY(JNIEnv* env, jstring hkey)
+{
+    const char* hkeyName = env->GetStringUTFChars(hkey, NULL);
+
+    HKEY rootKey;
+
+    if (strcmp("HKEY_CLASSES_ROOT", hkeyName) == 0)
+    {
+        rootKey = HKEY_CLASSES_ROOT;
+    }
+
+    else if (strcmp("HKEY_CURRENT_CONFIG", hkeyName) == 0)
+    {
+        rootKey = HKEY_CURRENT_CONFIG;
+    }
+
+    else if (strcmp("HKEY_CURRENT_USER", hkeyName) == 0)
+    {
+        rootKey = HKEY_CURRENT_USER;
+    }
+
+    else if (strcmp("HKEY_LOCAL_MACHINE", hkeyName) == 0)
+    {
+        rootKey = HKEY_LOCAL_MACHINE;
+    }
+
+    else if (strcmp("HKEY_USERS", hkeyName) == 0)
+    {
+        rootKey = HKEY_USERS;
+    }
+
+    else
+    {
+        rootKey = NULL;
+    }
+
+    env->ReleaseStringUTFChars(hkey, hkeyName);
+
+    return rootKey;
+}
+
+void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD& pvData)
+{
+    DWORD pcbData = sizeof(DWORD);
+    LONG  resGet  = RegGetValue(hkey, lpSubKey, lpValue, RRF_RT_ANY, NULL,
+        (PVOID)&pvData, &pcbData);
+
+    if (resGet != ERROR_SUCCESS)
+    {
+        pvData = INT_MAX;
+    }
+}
 #endif
 
 //helper methods for sound generation (POSIX only)
@@ -322,6 +375,40 @@ JNIEXPORT jdouble JNICALL Java_JNIHelper_getSystemMemoryInfo(JNIEnv* env,
     env->ReleaseStringUTFChars(unitMode, um);
 
     return systemMemoryInfo;
+}
+
+JNIEXPORT jint JNICALL Java_JNIHelper_getRegistryValueNumeric(JNIEnv* env,
+    jclass javaClass, jstring hkey, jstring subkey, jstring value)
+{
+    #ifdef _WIN32
+    HKEY rootKey = convertStringToHKEY(env, hkey);
+
+    if (rootKey == NULL)
+    {
+        return -1;
+    }
+
+    else
+    {
+        DWORD  pvData   = 0;
+        LPCSTR lpSubKey = (LPCSTR)env->GetStringUTFChars(subkey, NULL);
+        LPCSTR lpValue  = (LPCSTR)env->GetStringUTFChars(value,  NULL);
+
+        getRegValue(rootKey, lpSubKey, lpValue, pvData);
+
+        env->ReleaseStringUTFChars(subkey, lpSubKey);
+        env->ReleaseStringUTFChars(value,  lpValue);
+
+        if (pvData == INT_MAX)
+        {
+            return -1;
+        }
+
+        return pvData;
+    }
+    #else
+    return -1;
+    #endif
 }
 
 JNIEXPORT jstring JNICALL Java_JNIHelper_getComputerName(JNIEnv* env,
