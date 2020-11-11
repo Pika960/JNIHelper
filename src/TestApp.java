@@ -8,10 +8,10 @@
 public class TestApp
 {
     //get some colors
-    private static int blue   = Colors.light_blue.getColorCode();
-    private static int green  = Colors.light_green.getColorCode();
-    private static int red    = Colors.light_red.getColorCode();
-    private static int yellow = Colors.light_yellow.getColorCode();
+    private static int blue   = Colors.LIGHT_BLUE.getColorCode();
+    private static int green  = Colors.LIGHT_GREEN.getColorCode();
+    private static int red    = Colors.LIGHT_RED.getColorCode();
+    private static int yellow = Colors.LIGHT_YELLOW.getColorCode();
 
     /**
      * main program logic

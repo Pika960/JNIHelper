@@ -9,82 +9,82 @@ public enum Colors
     /**
      * the color black
      */
-    black,
+    BLACK,
 
     /**
      * the color blue
      */
-    blue,
+    BLUE,
 
     /**
      * the color green
      */
-    green,
+    GREEN,
 
     /**
      * the color aqua
      */
-    aqua,
+    AQUA,
 
     /**
      * the color red
      */
-    red,
+    RED,
 
     /**
      * the color purple
      */
-    purple,
+    PURPLE,
 
     /**
      * the color yellow
      */
-    yellow,
+    YELLOW,
 
     /**
      * the color white
      */
-    white,
+    WHITE,
 
     /**
      * the color gray
      */
-    gray,
+    GRAY,
 
     /**
      * the color light blue
      */
-    light_blue,
+    LIGHT_BLUE,
 
     /**
      * the color light green
      */
-    light_green,
+    LIGHT_GREEN,
 
     /**
      * the color light aqua
      */
-    light_aqua,
+    LIGHT_AQUA,
 
     /**
      * the color light red
      */
-    light_red,
+    LIGHT_RED,
 
     /**
      * the color light purple
      */
-    light_purple,
+    LIGHT_PURPLE,
 
     /**
      * the color light yellow
      */
-    light_yellow,
+    LIGHT_YELLOW,
 
     /**
      * the color bright white
      */
-    bright_white;
+    BRIGHT_WHITE;
 
     /**
      * assigns a numeric value to the enum
@@ -98,22 +98,22 @@ public enum Colors
         {
             switch(this)
             {
-                case black:        return  0;
-                case blue:         return  1;
-                case green:        return  2;
-                case aqua:         return  3;
-                case red:          return  4;
-                case purple:       return  5;
-                case yellow:       return  6;
-                case white:        return  7;
-                case gray:         return  8;
-                case light_blue:   return  9;
-                case light_green:  return 10;
-                case light_aqua:   return 11;
-                case light_red:    return 12;
-                case light_purple: return 13;
-                case light_yellow: return 14;
-                case bright_white: return 15;
+                case BLACK:        return  0;
+                case BLUE:         return  1;
+                case GREEN:        return  2;
+                case AQUA:         return  3;
+                case RED:          return  4;
+                case PURPLE:       return  5;
+                case YELLOW:       return  6;
+                case WHITE:        return  7;
+                case GRAY:         return  8;
+                case LIGHT_BLUE:   return  9;
+                case LIGHT_GREEN:  return 10;
+                case LIGHT_AQUA:   return 11;
+                case LIGHT_RED:    return 12;
+                case LIGHT_PURPLE: return 13;
+                case LIGHT_YELLOW: return 14;
+                case BRIGHT_WHITE: return 15;
                 default:           return  0;
             }
         }
@@ -125,22 +125,22 @@ public enum Colors
         {
             switch(this)
             {
-                case black:        return 30;
-                case blue:         return 34;
-                case green:        return 32;
-                case aqua:         return 36;
-                case red:          return 31;
-                case purple:       return 35;
-                case yellow:       return 33;
-                case white:        return 37;
-                case gray:         return 37;
-                case light_blue:   return 34;
-                case light_green:  return 32;
-                case light_aqua:   return 36;
-                case light_red:    return 31;
-                case light_purple: return 35;
-                case light_yellow: return 33;
-                case bright_white: return 37;
+                case BLACK:        return 30;
+                case BLUE:         return 34;
+                case GREEN:        return 32;
+                case AQUA:         return 36;
+                case RED:          return 31;
+                case PURPLE:       return 35;
+                case YELLOW:       return 33;
+                case WHITE:        return 37;
+                case GRAY:         return 37;
+                case LIGHT_BLUE:   return 34;
+                case LIGHT_GREEN:  return 32;
+                case LIGHT_AQUA:   return 36;
+                case LIGHT_RED:    return 31;
+                case LIGHT_PURPLE: return 35;
+                case LIGHT_YELLOW: return 33;
+                case BRIGHT_WHITE: return 37;
                 default:           return 30;
             }
         }
