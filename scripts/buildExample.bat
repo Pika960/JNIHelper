@@ -5,6 +5,11 @@ echo Buildsystem for JNIHelper - Windows
 echo (c) 2020 Gabriel Daenner
 echo.
 
+set JAVA_ARGS=noMenu
+
+if /i [%1]==[--interactive]  set JAVA_ARGS=
+if /i [%1]==[--quick]        set JAVA_ARGS=noMenu
+
 if exist ..\bin (
     cd ..\bin
     
@@ -43,7 +48,7 @@ javac -d bin %filenames%
 
 echo Running example-app ...
 cd bin
-java TestApp noMenu
+java TestApp %JAVA_ARGS%
 
 echo.
 pause
