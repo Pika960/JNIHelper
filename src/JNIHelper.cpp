@@ -186,6 +186,41 @@ HKEY convertStringToHKEY(JNIEnv* env, jstring hkey)
     return rootKey;
 }
 
+LONG deleteRegKey(HKEY hkey, LPCSTR lpSubKey)
+{
+    HKEY regKey;
+    LONG resDelete = RegDeleteKey(hkey, lpSubKey);
+
+    if (resDelete == ERROR_SUCCESS)
+    {
+        return resDelete;
+    }
+
+    LONG resOpen = RegOpenKeyEx(hkey, lpSubKey, 0, KEY_READ, &regKey);
+
+    if (resOpen != ERROR_SUCCESS)
+    {
+        if (resOpen == ERROR_FILE_NOT_FOUND)
+        {
+            return ERROR_SUCCESS;
+        }
+
+        else
+        {
+            return resOpen;
+        }
+    }
+
+    LONG resClose = RegCloseKey(regKey);
+
+    if (resClose != ERROR_SUCCESS)
+    {
+        return resClose;
+    }
+
+    return ERROR_SUCCESS;
+}
+
 LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD dwData)
 {
     HKEY regKey;
@@ -358,6 +393,37 @@ float beep_waveform_sine(beep_head* head)
 #endif
 
 //core methods
+JNIEXPORT jboolean JNICALL Java_JNIHelper_deleteRegistryKey(JNIEnv* env,
+    jclass javaClass, jstring hkey, jstring subkey)
+{
+    #ifdef _WIN32
+    HKEY rootKey = convertStringToHKEY(env, hkey);
+
+    if (rootKey == NULL)
+    {
+        return JNI_FALSE;
+    }
+
+    else
+    {
+        LPCSTR lpSubKey = (LPCSTR)env->GetStringUTFChars(subkey, NULL);
+
+        LONG result = deleteRegKey(rootKey, lpSubKey);
+
+        env->ReleaseStringUTFChars(subkey, lpSubKey);
+
+        if (result != ERROR_SUCCESS)
+        {
+            return JNI_FALSE;
+        }
+
+        return JNI_TRUE;
+    }
+    #else
+    return JNI_FALSE;
+    #endif
+}
+
 JNIEXPORT jboolean JNICALL Java_JNIHelper_isElevated(JNIEnv* env,
     jclass javaClass)
 {
