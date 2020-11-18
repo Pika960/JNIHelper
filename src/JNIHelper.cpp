@@ -544,6 +544,31 @@ JNIEXPORT jboolean JNICALL Java_JNIHelper_isElevated(JNIEnv* env,
     return isElevated;
 }
 
+JNIEXPORT jboolean JNICALL Java_JNIHelper_isHeadless(JNIEnv* env,
+    jclass javaClass)
+{
+    jboolean isHeadless = JNI_FALSE;
+
+    #ifdef _WIN32
+    DISPLAY_DEVICE displayDevice;
+    DWORD          displayIndex = 0;
+
+    displayDevice.cb = sizeof(DISPLAY_DEVICE);
+
+    if (!EnumDisplayDevices(NULL, displayIndex, &displayDevice, 0))
+    {
+        isHeadless = JNI_TRUE;
+    }
+    #else
+    if (NULL == getenv("DISPLAY"))
+    {
+        isHeadless = JNI_TRUE;
+    }
+    #endif
+
+    return isHeadless;
+}
+
 JNIEXPORT jboolean JNICALL Java_JNIHelper_setRegistryValueNumeric(JNIEnv* env,
     jclass javaClass, jstring hkey, jstring subkey, jstring value, jint data)
 {

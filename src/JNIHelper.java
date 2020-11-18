@@ -42,6 +42,12 @@ public class JNIHelper
     public static native boolean isElevated();
 
     /**
+     * checks if a graphical target is available
+     * @return true if no graphical target is available, otherwise false
+     */
+    public static native boolean isHeadless();
+
+    /**
      * sets the data of a specified value under a registry key (DWORD)
      * @param hkey the name of a handle to an open registry key
      * @param subkey the path of a registry key relative to the key specified by the hkey parameter
