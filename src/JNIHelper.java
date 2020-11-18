@@ -27,6 +27,15 @@ public class JNIHelper
     public static native boolean deleteRegistryKey(String hkey, String subkey);
 
     /**
+     * deletes the specified value from the specified registry key and subkey
+     * @param hkey the name of a handle to an open registry key
+     * @param subkey the path of a registry key relative to the key specified by the hkey parameter
+     * @param value the name of the registry value
+     * @return true if deleting the value succeeded, otherwise false
+     */
+    public static native boolean deleteRegistryValue(String hkey, String subkey, String value);
+
+    /**
      * checks if the application is running with elevated privileges
      * @return true if application is running with elevated privileges, otherwise false
      */

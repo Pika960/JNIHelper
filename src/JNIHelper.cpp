@@ -221,6 +221,57 @@ LONG deleteRegKey(HKEY hkey, LPCSTR lpSubKey)
     return ERROR_SUCCESS;
 }
 
+LONG deleteRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue)
+{
+    HKEY regKey;
+    LONG resDelete;
+
+    #if (_WIN32_WINNT >= 0x0600)
+    resDelete = RegDeleteKeyValue(hkey, lpSubKey, lpValue);
+
+    if (resDelete == ERROR_SUCCESS)
+    {
+        return resDelete;
+    }
+    #else
+    resDelete = ERROR_NOT_SUPPORTED;
+    #endif
+
+    LONG resOpen = RegOpenKeyEx(hkey, lpSubKey, 0, KEY_SET_VALUE, &regKey);
+
+    if (resOpen != ERROR_SUCCESS)
+    {
+        if (resOpen == ERROR_FILE_NOT_FOUND)
+        {
+            return ERROR_SUCCESS;
+        }
+
+        else
+        {
+            return resOpen;
+        }
+    }
+
+    if (resDelete == ERROR_NOT_SUPPORTED)
+    {
+        resDelete = RegDeleteValue(regKey, lpValue);
+
+        if (resDelete != ERROR_SUCCESS)
+        {
+            return resDelete;
+        }
+    }
+
+    LONG resClose = RegCloseKey(regKey);
+
+    if (resClose != ERROR_SUCCESS)
+    {
+        return resClose;
+    }
+
+    return ERROR_SUCCESS;
+}
+
 LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD dwData)
 {
     HKEY regKey;
@@ -411,6 +462,39 @@ JNIEXPORT jboolean JNICALL Java_JNIHelper_deleteRegistryKey(JNIEnv* env,
         LONG result = deleteRegKey(rootKey, lpSubKey);
 
         env->ReleaseStringUTFChars(subkey, lpSubKey);
+
+        if (result != ERROR_SUCCESS)
+        {
+            return JNI_FALSE;
+        }
+
+        return JNI_TRUE;
+    }
+    #else
+    return JNI_FALSE;
+    #endif
+}
+
+JNIEXPORT jboolean JNICALL Java_JNIHelper_deleteRegistryValue(JNIEnv* env,
+    jclass javaClass, jstring hkey, jstring subkey, jstring value)
+{
+    #ifdef _WIN32
+    HKEY rootKey = convertStringToHKEY(env, hkey);
+
+    if (rootKey == NULL)
+    {
+        return JNI_FALSE;
+    }
+
+    else
+    {
+        LPCSTR lpSubKey = (LPCSTR)env->GetStringUTFChars(subkey, NULL);
+        LPCSTR lpValue  = (LPCSTR)env->GetStringUTFChars(value,  NULL);
+
+        LONG result = deleteRegValue(rootKey, lpSubKey, lpValue);
+
+        env->ReleaseStringUTFChars(subkey, lpSubKey);
+        env->ReleaseStringUTFChars(value,  lpValue);
 
         if (result != ERROR_SUCCESS)
         {
