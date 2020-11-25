@@ -5,7 +5,7 @@ echo Buildsystem for JNIHelper - Windows
 echo (c) 2020 Gabriel Daenner
 echo.
 
-set JAVA_ARGS=noMenu
+set JAVA_ARGS=undefined
 
 if /i [%1]==[--interactive]  set JAVA_ARGS=
 if /i [%1]==[--quick]        set JAVA_ARGS=noMenu
@@ -46,9 +46,11 @@ for /f %%i in ('dir /b/s *.java') do (
 echo Compiling sources ...
 javac -d bin %filenames%
 
-echo Running example-app ...
-cd bin
-java TestApp %JAVA_ARGS%
+if not "%JAVA_ARGS%" == "undefined" (
+    echo Running example-app ...
+    cd bin
+    java TestApp %JAVA_ARGS%
+)
 
 echo.
 pause

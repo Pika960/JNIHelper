@@ -4,7 +4,7 @@
 
 # variables
 CLEAR="\e[0m"
-JAVA_ARGS="noMenu"
+JAVA_ARGS="undefined"
 RED="\e[1;31m"
 SKIP_CHECKS="false"
 
@@ -19,11 +19,15 @@ function buildExample()
     echo "Compiling sources ..."
     javac -d ./bin $(find . -name '*.java')
 
-    cd ./bin
-    echo "Running example-app ..."
-    java TestApp "$JAVA_ARGS"
+    if ! [ "$JAVA_ARGS" == "undefined" ]
+    then
+        cd ./bin
+        echo "Running example-app ..."
+        java TestApp "$JAVA_ARGS"
+        cd ..
+    fi
 
-    cd ../scripts
+    cd ./scripts
     exit
 }
 
