@@ -90,11 +90,63 @@ public class TestApp
 
     private static void quickTests()
     {
-        JNIHelper.printColoredText("Blue\n",   blue);
-        JNIHelper.printColoredText("Green\n",  green);
-        JNIHelper.printColoredText("Red\n",    red);
-        JNIHelper.printColoredText("Yellow\n", yellow);
-        JNIHelper.beep(440, 1000);
+        JNIHelper.consoleClear();
+
+        String computerName = JNIHelper.getComputerName();
+        String systemName   = JNIHelper.getOperatingSystemName();
+        String userName     = JNIHelper.getUserName();
+
+        System.out.print("Running TestApp in quick mode\n");
+        System.out.print("Started by user \"" + userName + "\" on device \"" +  computerName + "\"\n\n");
+
+        System.out.print("Test 1 - Display system information\n");
+        System.out.printf("Name of the current operating system: %s\n\n", systemName);
+
+        System.out.print("Test 2 - Modify/Access Windows Registry\n");
+
+        if (systemName.toLowerCase().contains("win"))
+        {
+            String hklm   = HKEY.HKEY_LOCAL_MACHINE.toString();
+            String subkey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
+
+            String productName = JNIHelper.getRegistryValueText(hklm, subkey, "ProductName");
+            String systemRoot  = JNIHelper.getRegistryValueText(hklm, subkey, "SystemRoot");
+
+            System.out.printf("ProductName: %s\n",   productName);
+            System.out.printf("SystemRoot:  %s\n\n", systemRoot);
+        }
+
+        else
+        {
+            System.out.print("It appears that this computer is not running Windows.\n");
+            System.out.print("For this reason this test is skipped.\n\n");
+        }
+
+        System.out.print("Test 3 - Print colored text\n");
+        JNIHelper.printColoredText("I am ",        blue);
+        JNIHelper.printColoredText("a very ",      green);
+        JNIHelper.printColoredText("colorful ",    red);
+        JNIHelper.printColoredText("message.\n\n", yellow);
+
+        System.out.print("Test 4 - Send argument to host\n");
+        JNIHelper.sendStringToNative("java --version");
+        System.out.print("\n");
+
+        System.out.print("Test 5 - Sound generation\n");
+
+        if (JNIHelper.isHeadless())
+        {
+            System.out.print("It appears that this is a headless device.\n");
+            System.out.print("For this reason this test is skipped.\n\n");
+        }
+
+        else
+        {
+            System.out.print("Generating simple beep for 1 second.\n\n");
+            JNIHelper.beep(440, 1000);
+        }
+
+        System.out.print("Goodbye\n");
     }
 
     private static void testCases(int userInput)
