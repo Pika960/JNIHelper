@@ -14,15 +14,18 @@ function buildNative()
     cd ../src
 
     echo "Compiling JNIHelper.java ..."
-    javac JNIHelper.java
+    javac ./java/JNIHelper.java
     echo "Generating resources ..."
-    javac JNIHelper.java -h .
+    javac ./java/JNIHelper.java -h ./native
     echo "Creating shared library ..."
-    $PREFERRED_COMPILER -fPIC -shared -o ../bin/libCLib.so JNIHelper.cpp  \
-        -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux"               \
+    $PREFERRED_COMPILER -fPIC -shared -o ../bin/libCLib.so  \
+        ./native/JNIHelper.cpp                              \
+        -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" \
         -lm -lncurses -lportaudio
     echo "Cleaning up ..."
-    rm -f *.class *.h
+    find . -name "*.class" -type f -delete
+    find . -name "*.h"     -type f -delete
+    find . -name "*.obj"   -type f -delete
 
     cd ../scripts
     exit
