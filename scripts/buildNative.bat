@@ -21,7 +21,7 @@ if exist ..\src (
     
     if exist *.class (
         echo Cleaning up build ...
-        del /s /q *.class *.h *.obj > NUL
+        del /s /q *.class JNIHelper.h *.obj > NUL
     ) else (echo Nothing to clean)
 ) else (
     echo Error: No src directory found.
@@ -109,15 +109,15 @@ javac .\java\JNIHelper.java -h .\native
 
 echo Creating JNI-DLL
 if /i "%PREFERRED_COMPILER%"=="GCC" (
-    g++ -Wall -D_JNI_IMPLEMENTATION_ -Wl,--kill-at  -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32  -shared -o ..\bin\CLib.dll .\native\JNIHelper.cpp -m64
+    g++ -Wall -D_JNI_IMPLEMENTATION_ -Wl,--kill-at -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -shared -o ..\bin\CLib.dll .\native\JNIHelper.cpp .\native\windows.cpp -m64
 )
 
 if /i "%PREFERRED_COMPILER%"=="MSVC" (
-    cl -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -LD -MT -Fe..\bin\CLib.dll .\native\JNIHelper.cpp Advapi32.lib User32.lib
+    cl -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -LD -MT -Fe..\bin\CLib.dll .\native\JNIHelper.cpp .\native\windows.cpp Advapi32.lib User32.lib
 )
 
 echo Cleaning up ...
-del /s /q *.class *.h *.obj > NUL
+del /s /q *.class JNIHelper.h *.obj > NUL
 echo.
 
 pause
