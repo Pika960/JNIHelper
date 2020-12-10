@@ -109,7 +109,7 @@ javac .\java\JNIHelper.java -h .\native
 
 echo Creating JNI-DLL
 if /i "%PREFERRED_COMPILER%"=="GCC" (
-    g++ -Wall -D_JNI_IMPLEMENTATION_ -Wl,--kill-at -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32 -shared -o ..\bin\CLib.dll .\native\JNIHelper.cpp .\native\windows.cpp -m64
+    g++ -fPIC -m64 -shared -Wall -Wl,--kill-at -O2 -o ..\bin\CLib.dll .\native\JNIHelper.cpp .\native\windows.cpp -I%JAVA_HOME%/include -I%JAVA_HOME%/include/win32
 )
 
 if /i "%PREFERRED_COMPILER%"=="MSVC" (

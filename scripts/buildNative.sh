@@ -18,9 +18,9 @@ function buildNative()
     echo "Generating resources ..."
     javac ./java/JNIHelper.java -h ./native
     echo "Creating shared library ..."
-    $PREFERRED_COMPILER -fPIC -shared -o ../bin/libCLib.so  \
-        ./native/JNIHelper.cpp ./native/posix.cpp           \
-        -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" \
+    $PREFERRED_COMPILER -fPIC -shared -Wall -O2 -o ../bin/libCLib.so \
+        ./native/JNIHelper.cpp ./native/posix.cpp                    \
+        -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux"          \
         -lm -lncurses -lportaudio
     echo "Cleaning up ..."
     find . -name "*.class"     -type f -delete
