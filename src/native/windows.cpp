@@ -53,8 +53,8 @@ int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
     char hexCurrent[3];
     char hexNew[3];
 
-    strncpy(hexCurrent, decToHex(currentConsoleAttr), 3);
-    strncpy(hexNew,     decToHex(newConsoleAttr),     3);
+    strncpy(hexCurrent, decToHex(currentConsoleAttr), 2);
+    strncpy(hexNew,     decToHex(newConsoleAttr),     2);
 
     if (strlen(hexCurrent) == 1)
     {
