@@ -127,7 +127,7 @@ JNIEXPORT jboolean JNICALL Java_JNIHelper_isHeadless(JNIEnv* env,
         isHeadless = JNI_TRUE;
     }
     #else
-    if (NULL == getenv("DISPLAY"))
+    if (getenv("DISPLAY") == NULL && getenv("WAYLAND_DISPLAY") == NULL)
     {
         isHeadless = JNI_TRUE;
     }
