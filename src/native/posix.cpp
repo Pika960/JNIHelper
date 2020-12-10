@@ -1,6 +1,10 @@
 //includes
 #include "include_posix.h"
 
+/**
+ * gets a character from the console
+ * @return the pressed character
+ */
 char getPressedCharacter()
 {
     char           buf = 0;
@@ -39,6 +43,11 @@ char getPressedCharacter()
     return buf;
 }
 
+/**
+ * generates a sine waveform
+ * @param head an actively playing stream of audio
+ * @return the generated sine waveform
+ */
 float beep_waveform_sine(beep_head* head)
 {
     beep_note* note = head->note;
@@ -46,6 +55,16 @@ float beep_waveform_sine(beep_head* head)
         * head->frame / SAMPLE_RATE);
 }
 
+/**
+ * this callback fills a sound device's buffer with audio samples (frames)
+ * @param inputBuffer pointer to the input buffer
+ * @param outputBuffer pointer to the output buffer
+ * @param framesPerBuffer number of frames per buffer
+ * @param timeInfo pointer to the time info callback
+ * @param statusFlags flags for PaStreamCallback
+ * @param userData the data of the audio stream
+ * @return gignal that the stream should continue
+ */
 int beep_head_callback(const void* inputBuffer, void* outputBuffer,
     unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
     PaStreamCallbackFlags statusFlags, void* userData)
@@ -62,6 +81,9 @@ int beep_head_callback(const void* inputBuffer, void* outputBuffer,
     return paContinue;
 }
 
+/**
+ * plays a beep note
+ */
 void beep_note_play(beep_note* note)
 {
     beep_head head = {
@@ -78,6 +100,9 @@ void beep_note_play(beep_note* note)
     Pa_AbortStream(stream);
 }
 
+/**
+ * flushes the input buffer
+ */
 void clearInputBuffer()
 {
     int stdin_copy = dup(STDIN_FILENO);
@@ -86,12 +111,18 @@ void clearInputBuffer()
     close(stdin_copy);
 }
 
+/**
+ * flushes the input and output buffer
+ */
 void flushBuffers()
 {
     fflush(stdout);
     clearInputBuffer();
 }
 
+/**
+ * initializes PortAudio
+ */
 void portaudio_initialize()
 {
     if (!freopen("/dev/null", "w", stderr))
@@ -107,6 +138,9 @@ void portaudio_initialize()
     }
 }
 
+/**
+ * terminates PortAudio
+ */
 void portaudio_terminate()
 {
     if (!freopen("/dev/null", "w", stderr))
