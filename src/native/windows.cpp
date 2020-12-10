@@ -1,12 +1,23 @@
 //includes
 #include "include_windows.h"
 
+/**
+ * converts a decimal to a hexadecimal number
+ * @param number the decimal number
+ * @return the hexadecimal number
+ */
 char* decToHex(int number)
 {
     char hexString[20];
     return itoa(number, hexString, 16);
 }
 
+/**
+ * converts a string to the corresponding HKEY
+ * @param env a pointer to the JNI environment
+ * @param hkey the name of a handle to an open registry key
+ * @return the corresponding HKEY
+ */
 HKEY convertStringToHKEY(JNIEnv* env, jstring hkey)
 {
     const char* hkeyName = env->GetStringUTFChars(hkey, NULL);
@@ -48,6 +59,12 @@ HKEY convertStringToHKEY(JNIEnv* env, jstring hkey)
     return rootKey;
 }
 
+/**
+ * generates a new color code based on the existing configuration
+ * @param currentConsoleAttr the current attribute configuration
+ * @param newConsoleAttr the new attribute configuration
+ * @return the new color code
+ */
 int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
 {
     char hexCurrent[3];
@@ -70,11 +87,22 @@ int generateNewColorCode(WORD currentConsoleAttr, WORD newConsoleAttr)
     return hexToDec(hexCurrent);
 }
 
-int hexToDec(char* str1)
+/**
+ * converts a hexadecimal to a decimal number
+ * @param str the hexadecimal number
+ * @return the decimal number
+ */
+int hexToDec(char* str)
 {
-    return strtol(str1, NULL, 16);
+    return strtol(str, NULL, 16);
 }
 
+/**
+ * deletes a registry key
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @return ERROR_SUCCESS if successful, otherwise the specific error code
+ */
 LONG deleteRegKey(HKEY hkey, LPCSTR lpSubKey)
 {
     HKEY regKey;
@@ -110,6 +138,13 @@ LONG deleteRegKey(HKEY hkey, LPCSTR lpSubKey)
     return ERROR_SUCCESS;
 }
 
+/**
+ * deletes a registry value
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @param lpValue the name of the value
+ * @return ERROR_SUCCESS if successful, otherwise the specific error code
+ */
 LONG deleteRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue)
 {
     HKEY regKey;
@@ -161,6 +196,14 @@ LONG deleteRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue)
     return ERROR_SUCCESS;
 }
 
+/**
+ * creates/sets a registry value (numeric)
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @param lpValue the name of the value
+ * @param dwData the data of the value
+ * @return ERROR_SUCCESS if successful, otherwise the specific error code
+ */
 LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD dwData)
 {
     HKEY regKey;
@@ -198,6 +241,14 @@ LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD dwData)
     return ERROR_SUCCESS;
 }
 
+/**
+ * creates/sets a registry value (text)
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @param lpValue the name of the value
+ * @param lpData the data of the value
+ * @return ERROR_SUCCESS if successful, otherwise the specific error code
+ */
 LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, LPCSTR lpData)
 {
     HKEY regKey;
@@ -235,12 +286,22 @@ LONG setRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, LPCSTR lpData)
     return ERROR_SUCCESS;
 }
 
+/**
+ * flushes the input and output buffer
+ */
 void flushBuffers()
 {
     fflush(stdout);
     FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 }
 
+/**
+ * gets a registry value (text)
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @param lpValue the name of the value
+ * @param pvData the reference where the requested data will be stored
+ */
 void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, char& pvData)
 {
     DWORD pcbData = 256;
@@ -253,6 +314,13 @@ void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, char& pvData)
     }
 }
 
+/**
+ * gets a registry value (numeric)
+ * @param hkey a handle to an open registry key
+ * @param lpSubKey the path of a registry key relative to the hkey parameter
+ * @param lpValue the name of the value
+ * @param pvData the reference where the requested data will be stored
+ */
 void getRegValue(HKEY hkey, LPCSTR lpSubKey, LPCSTR lpValue, DWORD& pvData)
 {
     DWORD pcbData = sizeof(DWORD);
